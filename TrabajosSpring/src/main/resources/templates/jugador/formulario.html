@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Jugador</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input { width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        button { padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        button:hover { background: #219a52; }
+        a { color: #777; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <a th:href="@{/jugadores}">← Volver a Jugadores</a>
+    <h1 th:text="${jugador.id == null ? 'Nuevo Jugador' : 'Editar Jugador'}">Formulario</h1>
+
+    <form th:action="@{/jugadores/guardar}" method="post" th:object="${jugador}">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombre}" placeholder="Ej: Lionel" required />
+        </div>
+        <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" th:field="*{apellido}" placeholder="Ej: Messi" />
+        </div>
+        <div class="form-group">
+            <label>Número de Camiseta</label>
+            <input type="number" th:field="*{numero}" placeholder="Ej: 10" />
+        </div>
+        <div class="form-group">
+            <label>Posición</label>
+            <input type="text" th:field="*{posicion}" placeholder="Ej: Delantero" />
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

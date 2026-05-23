@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Club</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select { width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        select[multiple] { height: 120px; }
+        button { padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        button:hover { background: #219a52; }
+        a { color: #777; text-decoration: none; font-size: 14px; }
+        small { display: block; color: #999; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <a th:href="@{/clubes}">← Volver a Clubes</a>
+    <h1 th:text="${club.id == null ? 'Nuevo Club' : 'Editar Club'}">Formulario Club</h1>
+
+    <form th:action="@{/clubes/guardar}" method="post">
+        <input type="hidden" th:field="*{id}" th:object="${club}" />
+
+        <div class="form-group">
+            <label>Nombre del Club</label>
+            <input type="text" th:field="*{nombre}" th:object="${club}" placeholder="Ej: Millonarios FC" required />
+        </div>
+        <div class="form-group">
+            <label>Ciudad</label>
+            <input type="text" th:field="*{ciudad}" th:object="${club}" placeholder="Ej: Bogotá" />
+        </div>
+        <div class="form-group">
+            <label>Año de Fundación</label>
+            <input type="number" th:field="*{anioFundacion}" th:object="${club}" placeholder="Ej: 1946" />
+        </div>
+
+        <!-- Entrenador (OneToOne) -->
+        <div class="form-group">
+            <label>Entrenador (@OneToOne)</label>
+            <select name="entrenadorId">
+                <option value="">-- Sin entrenador --</option>
+                <option th:each="e : ${entrenadores}"
+                        th:value="${e.id}"
+                        th:text="${e.nombre + ' ' + e.apellido}"
+                        th:selected="${club.entrenador != null && club.entrenador.id == e.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Asociacion (ManyToOne) -->
+        <div class="form-group">
+            <label>Asociación (@ManyToOne)</label>
+            <select name="asociacionId">
+                <option value="">-- Sin asociación --</option>
+                <option th:each="a : ${asociaciones}"
+                        th:value="${a.id}"
+                        th:text="${a.nombre}"
+                        th:selected="${club.asociacion != null && club.asociacion.id == a.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Competiciones (ManyToMany) -->
+        <div class="form-group">
+            <label>Competiciones (@ManyToMany)</label>
+            <select name="competicionIds" multiple>
+                <option th:each="c : ${competiciones}"
+                        th:value="${c.id}"
+                        th:text="${c.nombre}"
+                        th:selected="${club.competiciones != null && club.competiciones.contains(c)}">
+                </option>
+            </select>
+            <small>Mantén Ctrl para seleccionar varias</small>
+        </div>
+
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

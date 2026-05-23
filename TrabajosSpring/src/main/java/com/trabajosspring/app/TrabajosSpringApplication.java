@@ -1,0 +1,12 @@
+package com.trabajosspring.app;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class TrabajosSpringApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TrabajosSpringApplication.class, args);
+    }
+}

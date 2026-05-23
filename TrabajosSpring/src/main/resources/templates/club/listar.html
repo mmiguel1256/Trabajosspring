@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clubes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: #3498db; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover td { background: #f0f8ff; }
+        a { color: #3498db; text-decoration: none; margin-right: 8px; }
+        a:hover { text-decoration: underline; }
+        .btn { display: inline-block; padding: 8px 16px; background: #27ae60; color: white; border-radius: 5px; margin-bottom: 20px; }
+        .btn:hover { background: #219a52; text-decoration: none; }
+        .home { color: #777; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <a class="home" th:href="@{/}">← Inicio</a>
+    <h1>🏟️ Clubes</h1>
+    <a class="btn" th:href="@{/clubes/nuevo}">+ Nuevo Club</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Ciudad</th>
+                <th>Año Fundación</th>
+                <th>Entrenador</th>
+                <th>Asociación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="club : ${clubes}">
+                <td th:text="${club.id}"></td>
+                <td th:text="${club.nombre}"></td>
+                <td th:text="${club.ciudad}"></td>
+                <td th:text="${club.anioFundacion}"></td>
+                <td th:text="${club.entrenador != null ? club.entrenador.nombre + ' ' + club.entrenador.apellido : '-'}"></td>
+                <td th:text="${club.asociacion != null ? club.asociacion.nombre : '-'}"></td>
+                <td>
+                    <a th:href="@{/clubes/ver/{id}(id=${club.id})}">Ver</a>
+                    <a th:href="@{/clubes/editar/{id}(id=${club.id})}">Editar</a>
+                    <a th:href="@{/clubes/eliminar/{id}(id=${club.id})}"
+                       onclick="return confirm('¿Eliminar este club?')">Eliminar</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(clubes)}">
+                <td colspan="7" style="text-align:center; color:#999;">No hay clubes registrados.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

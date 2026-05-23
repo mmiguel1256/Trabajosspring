@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Club</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        .card { background: white; padding: 20px; border-radius: 8px; max-width: 600px; }
+        .field { margin-bottom: 12px; }
+        .label { font-weight: bold; color: #555; }
+        .value { margin-top: 2px; }
+        ul { margin: 5px 0; padding-left: 20px; }
+        a { color: #3498db; text-decoration: none; margin-right: 10px; }
+        a:hover { text-decoration: underline; }
+        .section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <a th:href="@{/clubes}">← Volver a Clubes</a>
+    <h1>🏟️ Detalle: <span th:text="${club.nombre}"></span></h1>
+
+    <div class="card">
+        <div class="field">
+            <div class="label">ID:</div>
+            <div class="value" th:text="${club.id}"></div>
+        </div>
+        <div class="field">
+            <div class="label">Ciudad:</div>
+            <div class="value" th:text="${club.ciudad}"></div>
+        </div>
+        <div class="field">
+            <div class="label">Año de Fundación:</div>
+            <div class="value" th:text="${club.anioFundacion}"></div>
+        </div>
+
+        <div class="section">
+            <div class="label">👨‍💼 Entrenador (@OneToOne):</div>
+            <div class="value" th:if="${club.entrenador != null}">
+                <span th:text="${club.entrenador.nombre + ' ' + club.entrenador.apellido}"></span>
+                (<span th:text="${club.entrenador.nacionalidad}"></span>,
+                 <span th:text="${club.entrenador.edad}"></span> años)
+            </div>
+            <div class="value" th:if="${club.entrenador == null}">Sin entrenador asignado</div>
+        </div>
+
+        <div class="section">
+            <div class="label">🏢 Asociación (@ManyToOne):</div>
+            <div class="value" th:if="${club.asociacion != null}">
+                <span th:text="${club.asociacion.nombre}"></span>
+                - <span th:text="${club.asociacion.pais}"></span>
+            </div>
+            <div class="value" th:if="${club.asociacion == null}">Sin asociación</div>
+        </div>
+
+        <div class="section">
+            <div class="label">🏃 Jugadores (@OneToMany):</div>
+            <ul th:if="${club.jugadores != null && !#lists.isEmpty(club.jugadores)}">
+                <li th:each="j : ${club.jugadores}">
+                    #<span th:text="${j.numero}"></span>
+                    <span th:text="${j.nombre + ' ' + j.apellido}"></span>
+                    - <span th:text="${j.posicion}"></span>
+                </li>
+            </ul>
+            <div th:if="${club.jugadores == null || #lists.isEmpty(club.jugadores)}">Sin jugadores asignados</div>
+        </div>
+
+        <div class="section">
+            <div class="label">🏆 Competiciones (@ManyToMany):</div>
+            <ul th:if="${club.competiciones != null && !#lists.isEmpty(club.competiciones)}">
+                <li th:each="c : ${club.competiciones}" th:text="${c.nombre}"></li>
+            </ul>
+            <div th:if="${club.competiciones == null || #lists.isEmpty(club.competiciones)}">Sin competiciones</div>
+        </div>
+
+        <div class="section">
+            <a th:href="@{/clubes/editar/{id}(id=${club.id})}">✏️ Editar</a>
+            <a th:href="@{/clubes/eliminar/{id}(id=${club.id})}"
+               onclick="return confirm('¿Eliminar este club?')">🗑️ Eliminar</a>
+        </div>
+    </div>
+</body>
+</html>

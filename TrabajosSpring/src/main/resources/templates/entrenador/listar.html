@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Entrenadores</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f6f8; }
+        h1 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: #3498db; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover td { background: #f0f8ff; }
+        a { color: #3498db; text-decoration: none; margin-right: 8px; }
+        a:hover { text-decoration: underline; }
+        .btn { display: inline-block; padding: 8px 16px; background: #27ae60; color: white; border-radius: 5px; margin-bottom: 20px; }
+        .btn:hover { background: #219a52; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <a href="/">← Inicio</a>
+    <h1>👨‍💼 Entrenadores</h1>
+    <a class="btn" th:href="@{/entrenadores/nuevo}">+ Nuevo Entrenador</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Nombre</th><th>Apellido</th><th>Edad</th><th>Nacionalidad</th><th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="e : ${entrenadores}">
+                <td th:text="${e.id}"></td>
+                <td th:text="${e.nombre}"></td>
+                <td th:text="${e.apellido}"></td>
+                <td th:text="${e.edad}"></td>
+                <td th:text="${e.nacionalidad}"></td>
+                <td>
+                    <a th:href="@{/entrenadores/editar/{id}(id=${e.id})}">Editar</a>
+                    <a th:href="@{/entrenadores/eliminar/{id}(id=${e.id})}"
+                       onclick="return confirm('¿Eliminar?')">Eliminar</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(entrenadores)}">
+                <td colspan="6" style="text-align:center; color:#999;">No hay entrenadores registrados.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
